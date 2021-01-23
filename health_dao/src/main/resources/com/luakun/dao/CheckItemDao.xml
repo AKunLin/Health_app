@@ -6,7 +6,58 @@
     <insert id="add" parameterType="com.luakun.pojo.CheckItem">
         insert into t_checkitem (code,name,sex,age,price,type,remark,attention) values (#{code},#{name},#{sex},#{age},#{price},#{type},#{remark},#{attention})
     </insert>
+
     <select id="findAll" resultType="com.luakun.pojo.CheckItem">
         select * from t_checkitem ;
     </select>
+
+    <select id="selectByCondition" parameterType="string" resultType="com.luakun.pojo.CheckItem">
+        select * from t_checkitem
+        <if test="value != null and value.length >0">
+            where code = #{value} or name = #{value}
+        </if>
+    </select>
+
+    <select id="findCountByCheckItemId" parameterType="int" resultType="long">
+        select count(*) from t_checkgroup_checkitem where checkitem_id = #{id}
+    </select>
+    
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkitem where id = #{id}
+    </delete>
+
+    <select id="findById" parameterType="int" resultType="com.luakun.pojo.CheckItem">
+        select * from t_checkitem where id = #{id}
+    </select>
+
+    <update id="edit" parameterType="com.luakun.pojo.CheckItem">
+        update t_checkitem
+        <set>
+            <if test="code!=null and code.length > 0" >
+                 code=#{code},
+            </if>
+            <if test="name!=null and name.length > 0" >
+                name=#{name},
+            </if>
+            <if test="sex!=null and sex.length > 0" >
+                sex=#{sex},
+            </if>
+            <if test="age!=null and age.length > 0" >
+                age=#{age},
+            </if>
+            <if test="price!=null" >
+                price=#{price},
+            </if>
+            <if test="type!=null and type.length > 0" >
+                type=#{type},
+            </if>
+            <if test="remark!=null and remark.length > 0" >
+                remark=#{remark},
+            </if>
+            <if test="attention!=null and attention.length > 0" >
+                attention=#{attention},
+            </if>
+        </set>
+        where  id = #{id}
+    </update>
 </mapper>

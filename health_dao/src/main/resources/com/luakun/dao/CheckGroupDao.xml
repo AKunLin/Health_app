@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luakun.dao.CheckGroupDao">
+<select id="selectByCondition" parameterType="string" resultType="com.luakun.pojo.CheckGroup">
+    select * from t_checkgroup
+    <if test="value != null and value.length >0">
+        where code = #{value} or name = #{value} or helpCode = #{value}
+    </if>
+</select>
+    <select id="findCheckItemIdsByGroupId" parameterType="int" resultType="int">
+    select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}
+</select>
+    <!--新增检查组-->
+    <insert id="add" parameterType="com.luakun.pojo.CheckGroup">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into t_checkgroup(code,name,sex,helpCode,remark,attention)
+        values
+        (#{code},#{name},#{sex},#{helpCode},#{remark},#{attention})
+    </insert>
+    <!--设置检查组和检查项的关联关系-->
+    <insert id="setCheckGroupAndCheckItem" parameterType="hashmap">
+        insert into t_checkgroup_checkitem(checkgroup_id,checkitem_id)
+        values
+        (#{checkgroup_id},#{checkitem_id})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="com.luakun.pojo.CheckGroup">
+    select * from t_checkgroup where id = #{id}
+</select>
+    <!--编辑-->
+    <update id="edit" parameterType="com.luakun.pojo.CheckGroup">
+        update t_checkgroup
+        <set>
+            <if test="name != null and name.length>0">
+                name = #{name},
+            </if>
+            <if test="sex != null and sex.length>0">
+                sex = #{sex},
+            </if>
+            <if test="code != null and code.length>0">
+                code = #{code},
+            </if>
+            <if test="helpCode != null and helpCode.length>0">
+                helpCode = #{helpCode},
+            </if>
+            <if test="attention != null and attention.length>0">
+                attention = #{attention},
+            </if>
+            <if test="remark != null and remark.length>0">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <delete id="deleteAssociation" parameterType="int">
+    delete from t_checkgroup_checkitem where checkgroup_id = #{id}
+</delete>
+    <delete id="deleteById" parameterType="int">
+        delete from t_checkgroup where id=#{id}
+    </delete>
+</mapper>
