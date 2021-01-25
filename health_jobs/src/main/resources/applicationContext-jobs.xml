@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                  http://www.springframework.org/schema/beans/spring-beans.xsd
+                  http://www.springframework.org/schema/context
+                  http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--包扫描 解决JedisPool为空异常-->
+    <context:component-scan base-package="com.luakun.jobs"/>
+    <!--1.注册任务类-->
+    <bean id="clearImgJob" class="com.luakun.jobs.ClearImgJob"/>
+    <!--2.配置任务描述  将任务类放到任务描述工厂对象中
+    通过java反射去调用任务类
+    -->
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--配置任务类-->
+        <property name="targetObject" ref="clearImgJob"/>
+        <!--配置任务方法-->
+        <property name="targetMethod" value="testClearImg"/>
+    </bean>
+
+    <!--3.配置触发器  配置什么时间执行-->
+    <bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <!--注册jobDetail-->
+        <property name="jobDetail" ref="jobDetail"/>
+        <!--配置什么时间运行-->
+        <property name="cronExpression">
+            <value>0 0 2 * * ?</value>
+        </property>
+    </bean>
+
+    <!--4.调度工厂  核心工厂 工厂启动的时候就加载了-->
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!--可以配置多个trigger-->
+        <property name="triggers">
+            <list>
+                <ref bean="trigger"/>
+            </list>
+        </property>
+    </bean>
+</beans>

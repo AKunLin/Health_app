@@ -8,6 +8,8 @@ import com.luakun.pojo.CheckGroup;
 import com.luakun.service.CheckGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,7 @@ import java.util.Map;
  * Description: CheckGroupServiceImpl
  */
 @Service
+@Transactional
 public class CheckGroupServiceImpl implements CheckGroupService {
     @Autowired
     private CheckGroupDao checkGroupDao;
@@ -58,6 +61,11 @@ public class CheckGroupServiceImpl implements CheckGroupService {
     public List<Integer> findCheckItemIdsByGroupId(Integer id) {
         List<Integer> list = checkGroupDao.findCheckItemIdsByGroupId(id);
         return list;
+    }
+
+    @Override
+    public List<CheckGroup> findAll() {
+        return checkGroupDao.findAll();
     }
 
 

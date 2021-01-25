@@ -34,4 +34,5 @@ public interface CheckGroupDao {
 
     List<Integer> findCheckItemIdsByGroupId(Integer id);
 
+    List<CheckGroup> findAll();
 }

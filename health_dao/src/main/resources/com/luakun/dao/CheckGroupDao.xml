@@ -3,12 +3,12 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.luakun.dao.CheckGroupDao">
-<select id="selectByCondition" parameterType="string" resultType="com.luakun.pojo.CheckGroup">
-    select * from t_checkgroup
-    <if test="value != null and value.length >0">
-        where code = #{value} or name = #{value} or helpCode = #{value}
-    </if>
-</select>
+    <select id="selectByCondition" parameterType="string" resultType="com.luakun.pojo.CheckGroup">
+        select * from t_checkgroup
+        <if test="value != null and value.length >0">
+            where code = #{value} or name = #{value} or helpCode = #{value}
+        </if>
+    </select>
     <select id="findCheckItemIdsByGroupId" parameterType="int" resultType="int">
     select checkitem_id from t_checkgroup_checkitem where checkgroup_id = #{id}
 </select>
@@ -51,7 +51,7 @@
                 attention = #{attention},
             </if>
             <if test="remark != null and remark.length>0">
-                remark = #{remark},
+                remark = #{remark}
             </if>
         </set>
         where id = #{id}
@@ -62,4 +62,7 @@
     <delete id="deleteById" parameterType="int">
         delete from t_checkgroup where id=#{id}
     </delete>
+    <select id="findAll" resultType="com.luakun.pojo.CheckGroup">
+        select * from t_checkgroup
+    </select>
 </mapper>

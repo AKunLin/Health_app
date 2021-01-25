@@ -80,5 +80,14 @@ public class CheckGroupController {
         List<Integer> list = checkGroupService.findCheckItemIdsByGroupId(id);
         return list;
     }
-
+    @GetMapping("/findAll")
+    public Result findAll() {
+        // 查询所有的检查组
+        List<CheckGroup> checkGroupList = checkGroupService.findAll();
+        if (checkGroupList != null && checkGroupList.size() > 0) {
+            Result result = new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, checkGroupList);
+            return result;
+        }
+        return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
+    }
 }

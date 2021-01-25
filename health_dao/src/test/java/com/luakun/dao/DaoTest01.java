@@ -14,13 +14,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * Description: DaoTest01
  */
 public class DaoTest01 {
-    @Test
+    //@Test
     public void Test001(){
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext-dao.xml");
         CheckItemDao checkItemDao = (CheckItemDao) applicationContext.getBean("checkItemDao");
         checkItemDao.add(new CheckItem(null,"6666","123","0","18",5.0f,"检查","hahah","wu1"));
     }
-    @Test
+   // @Test
     public void Test02(){
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("applicationContext-dao.xml");
         CheckItemDao checkItemDao = (CheckItemDao) applicationContext.getBean("checkItemDao");
