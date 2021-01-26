@@ -7,6 +7,7 @@ import com.luakun.entity.Result;
 import com.luakun.pojo.CheckItem;
 import com.luakun.service.CheckItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class CheckItemController {
     private CheckItemService checkItemService;
 
     @PostMapping("/add")
+    @PreAuthorize("hasAuthority('CHECKITEM_ADD')")//权限校验
     public Result add(@RequestBody CheckItem checkItem) {
         try {
             checkItemService.add(checkItem);
@@ -36,6 +38,7 @@ public class CheckItemController {
     }
 
     @PostMapping("/findPage")
+    @PreAuthorize("hasAuthority('CHECKITEM_QUERY')")//权限校验
     public PageResult findPage(@RequestBody QueryPageBean queryPageBean) {
 
         return checkItemService.findPage(queryPageBean.getCurrentPage(), queryPageBean.getPageSize(), queryPageBean.getQueryString());
@@ -43,6 +46,7 @@ public class CheckItemController {
     }
 
     @GetMapping("/delete")
+    @PreAuthorize("hasAuthority('CHECKITEM_DELETE')")//权限校验，使用CHECKITEM_DELETE123测试
     public Result delete(Integer id) {
         try {
             checkItemService.delete(id);

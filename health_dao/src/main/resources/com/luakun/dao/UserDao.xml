@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.luakun.dao.UserDao">
+    <resultMap id="userMap" type="com.luakun.pojo.User">
+        <id property="id" column="id"/>
+        <collection property="roles" column="id"
+            select="com.luakun.dao.RoleDao.findRolesByUserId">
+        </collection>
+    </resultMap>
+
+
+
+    <select id="findByName" resultMap="userMap" parameterType="string">
+        select u.* from t_user u where u.username=#{username}
+    </select>
+</mapper>

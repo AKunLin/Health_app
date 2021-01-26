@@ -233,6 +233,16 @@
             this.findPage()
         },
         methods: {
+            showMessage(r){
+                if(r == 'Error: Request failed with status code 403'){
+                    //权限不足
+                    this.$message.error('无访问权限');
+                    return;
+                }else{
+                    this.$message.error('未知错误');
+                    return;
+                }
+            },
             //编辑
             //编辑
             handleEdit() {
@@ -352,23 +362,30 @@
                 // 删除
                 handleDelete(row)
                 {
-                    //alert(row.id);
-                    this.$confirm("确认删除当前的检查项吗", {type: 'warning'}).then(() => {
-                        axios.get("/checkitem/delete.do?id=" + row.id).then(res => {
-                            if (res.data.flag) {
+                    // alert(row.id);
+                    this.$confirm("确认删除当前选中记录吗？","提示",{type:'warning'}).then(()=>{
+                        //点击确定按钮时只需此处代码
+                        // alert('用户点击的是确定按钮');
+                        axios.get("/checkitem/delete.do?id=" + row.id).then((res)=> {
+                            if(res.data.flag){
+                                //删除成功
                                 this.$message({
-                                    type: "success",
                                     message: res.data.message,
+                                    type: 'success'
                                 });
+                                //调用分页，获取最新分页数据
                                 this.findPage();
-                            } else {
-                                this.$message({
-                                    type: "error",
-                                    message: res.data.message
-                                })
+                            }else{
+                                //删除失败
+                                this.$message.error(res.data.message);
                             }
-                        })
-                    })
+                        }).catch((error)=>{
+                            this.showMessage(error);
+                        });
+                    }).catch(()=> {
+                        //点击取消按钮执行此代码
+                        this.$message('操作已取消');
+                    });
                 }
             }
         })
