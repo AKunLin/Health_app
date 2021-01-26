@@ -421,13 +421,68 @@
                 },
                 //编辑
                 handleEdit() {
+                    //填写检查组数据以及勾选检查项数据提交表单，校验（省略）发送/setmeal/add.do?checkGroups=xxx,this.formData post
+                    axios.post("/setmeal/edit.do?checkGroupIds="+this.checkGroups,this.formData).then(res=>{
+                        this.$message({
+                            message:   res.data.message,
+                            type: res.data.flag ? 'success': 'error'
+                        });
 
+                        if(res.data.flag){
+                            this.dialogFormVisible4Edit = false;
+                            //重新发送分页请求
+                            this.findPage();
+                        }
+                    })
                 },
                 handleUpdate(row) {
+                    //点击“编辑”弹出编辑窗口
+                    this.dialogFormVisible4Edit = true;
+                    //回显检查组数据 /checkgroup/findById.do?id=xxx get
+                    axios.get("/setmeal/findById.do?id="+row.id).then(res=>{
+                        this.formData = res.data.data;
+                        this.$message({
+                            message:   res.data.message,
+                            type: res.data.flag ? 'success': 'error'
+                        });
+                        //回显检查项列表数据（已经实现了）
+                        if(res.data.flag){
+                            axios.get("/checkgroup/findAll.do").then(res=>{
+                                this.tableData = res.data.data;
+                                this.$message({
+                                    message:   res.data.message,
+                                    type: res.data.flag ? 'success': 'error'
+                                });
 
+                                //回显勾选的检查项（checkGroupIds）  /checkgroup/findCheckItemIdsByGroupId.do？id=xx
+                                if(res.data.flag){
+                                    axios.get("/setmeal/findCheckGroupIdsBysetmeal.do?id="+row.id).then(res=>{
+                                        this.checkGroupIds = res.data;//List<Integer> [28,29,30]
+                                        // this.checkGroupIds = res.data.data;//Result [28,29,30]
+                                    })
+                                }
+                            })
+                        }
+                    })
                 },
                 handleDelete(row) {
-
+                //alert(row.id);
+                    this.$confirm("确认删除当前的套餐项吗", {type: 'warning'}).then(() => {
+                        axios.get("/setmeal/delete.do?id=" + row.id).then(res => {
+                            if (res.data.flag) {
+                                this.$message({
+                                    type: "success",
+                                    message: res.data.message,
+                                });
+                                this.findPage();
+                            } else {
+                                this.$message({
+                                    type: "error",
+                                    message: res.data.message
+                                })
+                            }
+                        })
+                    })
                 },
                 // 重置表单
                 resetForm() {

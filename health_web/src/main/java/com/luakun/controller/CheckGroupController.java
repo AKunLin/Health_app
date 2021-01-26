@@ -62,6 +62,8 @@ public class CheckGroupController {
             return new Result(false,MessageConstant.EDIT_CHECKGROUP_FAIL);
         }
     }
+
+
     @GetMapping("/delete")
     public Result delete(Integer id) {
         try {
@@ -75,8 +77,9 @@ public class CheckGroupController {
         }
         return new Result(true,MessageConstant.DELETE_CHECKGROUP_SUCCESS);
     }
+
     @RequestMapping("/findCheckItemIdsByGroupId")
-    public List<Integer> findCheckItemIdsByCheckGroupId(Integer id){
+    public List<Integer> findCheckGroupIdsBysetmeal(Integer id){
         List<Integer> list = checkGroupService.findCheckItemIdsByGroupId(id);
         return list;
     }

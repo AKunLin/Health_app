@@ -32,7 +32,8 @@ public class ClearImgJob {
                 for (String fileName : set) {
                         //2. 调用七牛云删除
                         QiniuUtils.deleteFileFromQiniu(fileName);
-                        //3.操作redis删除集合中垃圾图片
+                    System.out.println("删除的图片是:" + fileName);
+                    //3.操作redis删除集合中垃圾图片
                     jedisPool.getResource().srem(RedisConstant.SETMEAL_PIC_RESOURCES, fileName);
                 }
             }

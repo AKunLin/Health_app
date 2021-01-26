@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.luakun.pojo.Setmeal;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,4 +22,19 @@ public interface SetmealDao {
 
 
     void setSetmealAndCheckGroup(Map<String, Integer> map);
+
+    void edit(Setmeal setmeal);
+
+    Setmeal findById(int id);
+
+    long findCountBySelmealId(Integer id);
+
+    void deleteBySeId(Integer id);
+
+    void delete(Integer id);
+
+    List<Integer> findCheckGroupIdsBysetmeal(Integer id);
+
+    List<Setmeal> findAll();
+
 }

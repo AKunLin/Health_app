@@ -5,6 +5,7 @@ import com.luakun.constant.RedisConstant;
 import com.luakun.entity.PageResult;
 import com.luakun.entity.QueryPageBean;
 import com.luakun.entity.Result;
+import com.luakun.pojo.CheckGroup;
 import com.luakun.pojo.Setmeal;
 import com.luakun.service.SetmealService;
 import com.luakun.utils.QiniuUtils;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import redis.clients.jedis.JedisPool;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -67,5 +69,53 @@ public class SetmealController {
             return new Result(false,MessageConstant.ADD_SETMEAL_FAIL);
         }
         return new Result(true,MessageConstant.ADD_SETMEAL_SUCCESS);
+    }
+
+    @GetMapping("/findById")
+    public Result findById(Integer id){
+        try {
+            Setmeal setmeal = setmealService.findById(id);
+            return new Result(true,MessageConstant.QUERY_CHECKGROUP_SUCCESS,setmeal);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,MessageConstant.QUERY_CHECKGROUP_FAIL);
+        }
+    }
+    @PostMapping("/edit")
+    public Result edit(@RequestBody Setmeal setmeal){
+        try {
+            setmealService.edit(setmeal);
+            return new Result(true,MessageConstant.EDIT_CHECKGROUP_SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,MessageConstant.EDIT_CHECKGROUP_FAIL);
+        }
+    }
+
+    @GetMapping("/delete")
+    public Result delete(Integer id) {
+        try {
+            setmealService.delete(id);
+        }  catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_CHECKGROUP_FAIL);
+        }
+        return new Result(true,MessageConstant.DELETE_CHECKGROUP_SUCCESS);
+    }
+
+    @RequestMapping("/findCheckGroupIdsBysetmeal")
+    public List<Integer> findCheckGroupIdsBysetmeal(Integer id){
+        List<Integer> list = setmealService.findCheckGroupIdsBysetmeal(id);
+        return list;
+    }
+    @GetMapping("/findAll")
+    public Result findAll() {
+        // 查询所有的检查组
+        List<Setmeal> setmealList = setmealService.findAll();
+        if (setmealList != null && setmealList.size() > 0) {
+            Result result = new Result(true, MessageConstant.QUERY_CHECKGROUP_SUCCESS, setmealList);
+            return result;
+        }
+        return new Result(false, MessageConstant.QUERY_CHECKGROUP_FAIL);
     }
 }
